@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from sklearn.manifold import TSNE
 import sys
 import os
+# We set the parent directory to we can import the model and data loading functions
 # Get the directory of the current script
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
 # Add the parent directory to sys.path
@@ -10,17 +11,18 @@ parent_dir = os.path.dirname(current_script_dir)
 sys.path.insert(0, parent_dir)
 from models.model import MyAwesomeModel  # Update with your model import
 from data.make_dataset import mnist  # Update with your data loading method
-import os
+from typing import Callable, Optional, Tuple, Union, List
+import numpy as np
 
 
-def load_model(model_path):
+def load_model(model_path : str) -> torch.nn.Module:
     model = MyAwesomeModel()
     model.load_state_dict(torch.load(model_path))
     model.eval()
     return model
 
 
-def extract_features(model, dataloader):
+def extract_features(model : str, dataloader : torch.utils.data.DataLoader) -> Tuple[np.ndarray, np.ndarray]:
     features = []
     labels = []
     for data, target in dataloader:
@@ -37,7 +39,7 @@ def extract_features(model, dataloader):
     return features, labels
 
 
-def visualize_tsne(features, labels, save_path):
+def visualize_tsne(features : np.ndarray, labels : np.ndarray, save_path : str) -> None:
     tsne = TSNE(n_components=2, random_state=0)
     tsne_results = tsne.fit_transform(features)
 

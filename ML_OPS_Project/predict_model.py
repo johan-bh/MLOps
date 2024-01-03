@@ -5,6 +5,7 @@ from models.model import MyAwesomeModel
 from torchvision import transforms
 from PIL import Image
 import click
+from typing import Callable, Optional, Tuple, Union, List
 
 # Path to the folder containing .pt files
 current_script_path = os.path.abspath(__file__)
@@ -17,7 +18,7 @@ trained_models_path = os.path.join(current_script_dir, "models", "trained_models
 
 
 # Define a function to load images from a folder
-def load_images_from_folder(folder):
+def load_images_from_folder(folder : str):
     # Construct the absolute path to the raw images folder
     images = []
     for filename in os.listdir(folder):
@@ -28,12 +29,12 @@ def load_images_from_folder(folder):
 
 
 # Define a function to load images from a numpy/pickle file
-def load_images_from_file(file_path):
+def load_images_from_file(file_path : str):
     return np.load(file_path, allow_pickle=True)
 
 
 # Define a function to prepare the data for the model
-def prepare_data(images, transform):
+def prepare_data(images : List[Image.Image], transform : Callable):
     tensor_images = torch.stack([transform(image) for image in images])
     return tensor_images
 
