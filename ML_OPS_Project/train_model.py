@@ -36,7 +36,7 @@ def train(lr):
     train_set, _ = mnist()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = torch.nn.CrossEntropyLoss()
-    epochs = 50
+    epochs = 10
 
     # Initialize a list to track the loss for each epoch
     epoch_losses = []

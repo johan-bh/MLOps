@@ -3,7 +3,7 @@
 This repository was made as part of the exercises of the ML Ops course.
 The project uses as ML Ops cookiecutter template and the overall project structure can be seen in the section below. The project consists of a simple fully connected linear neural network that is trained on corrupted mnist data. 
 
-The primary scripts of the project are (note all the commands are run from the root folder "ML_Ops_Project"):
+The primary scripts of the project are (note all the commands are run from the root folder "MLOPS"):
 
 ### model.py: 
 This python file defines the neural network in pytorch
@@ -16,7 +16,7 @@ This python file run the training of the neural network or evaluation of the neu
 
 #### Example of commands:
     
-    python .\ML_OPS_Project\train_model.py --lr 1e-4
+    python .\ML_OPS_Project\train_model.py train --lr 1e-4
 
     python .\ML_OPS_Project\train_model.py evaluate trained_model.pth
 

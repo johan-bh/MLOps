@@ -11,8 +11,8 @@ current_script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_script_dir)
 sys.path.insert(0, parent_dir)
 
-from models.model import MyAwesomeModel
-from data.make_dataset import mnist
+from models.model import MyAwesomeModel  # Update with your model import
+from data.make_dataset import mnist  # Update with your data loading method
 import os
 
 def load_model(model_path):
