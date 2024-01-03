@@ -16,12 +16,29 @@ from data.make_dataset import mnist
 import os
 
 def load_model(model_path):
+    """Load a pre-trained model
+    
+    Inputs:
+    model_path: Path to the pre-trained model
+    
+    Outputs:
+    model: The pre-trained model
+    """
     model = MyAwesomeModel()
     model.load_state_dict(torch.load(model_path))
     model.eval()
     return model
 
 def extract_features(model, dataloader):
+    """Extract features from a pre-trained model.
+    
+    Inputs:
+    model: A pre-trained model
+    dataloader: A PyTorch dataloader
+    
+    Outputs:
+    features: Extracted features from the model
+    labels: Labels corresponding to the extracted features"""
     features = []
     labels = []
     for data, target in dataloader:
@@ -38,6 +55,14 @@ def extract_features(model, dataloader):
     return features, labels
 
 def visualize_tsne(features, labels, save_path):
+    """Visualize extracted features using t-SNE.
+    
+    Inputs:
+    features: Extracted features from the model
+    labels: Labels corresponding to the extracted features
+    save_path: Path to save the visualization
+    """
+
     tsne = TSNE(n_components=2, random_state=0)
     tsne_results = tsne.fit_transform(features)
     
@@ -62,7 +87,7 @@ if __name__ == "__main__":
 
     features, labels = extract_features(model, train_loader)
 
-
+    # Construct the path for saving the visualization
     reports_figures_path = os.path.join(current_script_dir, '..', '..', 'reports', 'figures')
     visualization_save_path = os.path.join(reports_figures_path, 'feature_visualization.png')
 

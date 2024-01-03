@@ -40,7 +40,15 @@ def prepare_data(images, transform):
 @click.argument('model_name')
 @click.argument('folder_name')
 def predict(model_name, folder_name):
-    """Load a pre-trained model and make predictions on provided data."""
+    """Load a pre-trained model and make predictions on provided data.
+    
+    Inputs:
+    model_name: Name of the pre-trained model to load
+    folder_name: Name of the folder containing the images to predict
+
+    Outputs:
+    Prints the predicted labels for each image
+    """
     # Load the pre-trained model
     model = MyAwesomeModel()
 

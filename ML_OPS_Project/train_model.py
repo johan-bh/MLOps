@@ -27,7 +27,15 @@ def cli():
 @click.command()
 @click.option("--lr", default=1e-3, help="learning rate to use for training")
 def train(lr):
-    """Train a model on MNIST."""
+    """Train a model on MNIST.
+    
+    Inputs:
+    lr: learning rate to use for training
+
+    Outputs:
+    Saves the trained model in the 'trained_models' folder
+    Saves a plot of the training curve in the 'reports/figures' folder
+    """
     print("Training day and night")
     print(lr)
 
@@ -78,7 +86,14 @@ def train(lr):
 @click.command()
 @click.argument("model_checkpoint")
 def evaluate(model_checkpoint):
-    """Evaluate a trained model."""
+    """Evaluate a trained model.
+    
+    Inputs:
+    model_checkpoint: Name of the model checkpoint to load
+    
+    Outputs:
+    Prints the test loss and accuracy
+    """
     print("Evaluating like my life dependends on it")
     print(model_checkpoint)
 
@@ -92,21 +107,30 @@ def evaluate(model_checkpoint):
     # print("Our model: \n\n", model, '\n')
     # print("The state dict keys: \n\n", state_dict.keys())
 
+    # Load the state dict into the network
     model.load_state_dict(state_dict)
 
+    # Load the test set
     _, test_set = mnist()
     criterion = torch.nn.CrossEntropyLoss()
     test_loss = 0
     accuracy = 0
 
+    # Set the model to evaluation mode
     model.eval()
+    # Turn off gradients for validation, saves memory and computations
     with torch.no_grad():
         for images, labels in test_set:
+            # Forward pass, then backward pass, then update weights
             output = model(images)
             test_loss += criterion(output, labels)
+            # Get the class probabilities
             ps = torch.exp(output)
+            # Get the top class of the output
             top_p, top_class = ps.topk(1, dim=1)
+            # See how many of the classes were correct?
             equals = top_class == labels.view(*top_class.shape)
+            # Calculate the mean (get the accuracy for this batch)
             accuracy += torch.mean(equals.type(torch.FloatTensor))
         else:
             print(f"Test loss: {test_loss/len(test_set):.3f}.. "
