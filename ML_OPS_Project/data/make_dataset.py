@@ -16,8 +16,8 @@ def mnist(batch_size=32):
     processed_data_path = os.path.join(current_script_dir, "..", "..", "data", "processed")
 
     # Load training data
-    train_images = torch.cat([torch.load(os.path.join(raw_data_path, f"train_images_{i}.pt")) for i in range(6)])
-    train_targets = torch.cat([torch.load(os.path.join(raw_data_path, f"train_target_{i}.pt")) for i in range(6)])
+    train_images = torch.cat([torch.load(os.path.join(raw_data_path, f"train_images_{i}.pt")) for i in range(10)])
+    train_targets = torch.cat([torch.load(os.path.join(raw_data_path, f"train_target_{i}.pt")) for i in range(10)])
     train_dataset = TensorDataset(train_images, train_targets)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
