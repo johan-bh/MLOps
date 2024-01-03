@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import TensorDataset, DataLoader
-from pathlib import Path
 import os
+
 
 def mnist(batch_size=32):
     """Return train and test dataloaders for MNIST."""
@@ -12,8 +12,8 @@ def mnist(batch_size=32):
     current_script_dir = os.path.dirname(current_script_path)
 
     # Construct the absolute path to the 'raw' data folder
-    raw_data_path = os.path.join(current_script_dir, '..', '..', 'data', 'raw')
-    processed_data_path = os.path.join(current_script_dir, '..', '..', 'data', 'processed')
+    raw_data_path = os.path.join(current_script_dir, "..", "..", "data", "raw")
+    processed_data_path = os.path.join(current_script_dir, "..", "..", "data", "processed")
 
     # Load training data
     train_images = torch.cat([torch.load(os.path.join(raw_data_path, f"train_images_{i}.pt")) for i in range(6)])
@@ -38,11 +38,13 @@ def mnist(batch_size=32):
 
     return train_loader, test_loader
 
+
 def normalize_and_save(data, mean, std, file_path):
     # Normalize the data
     normalized_data = (data - mean) / std
 
     # Save the normalized data
     torch.save(normalized_data, file_path)
+
 
 mnist()

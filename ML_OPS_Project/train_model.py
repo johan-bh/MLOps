@@ -13,10 +13,11 @@ current_script_path = os.path.abspath(__file__)
 current_script_dir = os.path.dirname(current_script_path)
 
 # Construct the absolute path to the 'trained_models' folder
-trained_models_path = os.path.join(current_script_dir, 'models', 'trained_models')
+trained_models_path = os.path.join(current_script_dir, "models", "trained_models")
 
 # Path to the reports/figures directory
-reports_figures_path = os.path.join(current_script_dir, '..', 'reports', 'figures')
+reports_figures_path = os.path.join(current_script_dir, "..", "reports", "figures")
+
 
 @click.group()
 def cli():
@@ -28,7 +29,7 @@ def cli():
 @click.option("--lr", default=1e-3, help="learning rate to use for training")
 def train(lr):
     """Train a model on MNIST.
-    
+
     Inputs:
     lr: learning rate to use for training
 
@@ -62,35 +63,32 @@ def train(lr):
         else:
             average_loss = train_loss / len(train_set)
             epoch_losses.append(average_loss)
-            print(f"Epoch {epoch+1}/{epochs}.. "
-                  f"Train loss: {train_loss/len(train_set):.3f}.. ")
-            
+            print(f"Epoch {epoch+1}/{epochs}.. " f"Train loss: {train_loss/len(train_set):.3f}.. ")
 
     # Save the model checkpoint
-    model_checkpoint_path = os.path.join(trained_models_path, 'trained_model.pth')
+    model_checkpoint_path = os.path.join(trained_models_path, "trained_model.pth")
     torch.save(model.state_dict(), model_checkpoint_path)
 
     # Generate and save a training curve plot
     plt.figure()
-    plt.plot(epoch_losses, label='Training loss')
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.title('Training Loss Curve')
+    plt.plot(epoch_losses, label="Training loss")
+    plt.xlabel("Epochs")
+    plt.ylabel("Loss")
+    plt.title("Training Loss Curve")
     plt.legend()
-    training_curve_path = os.path.join(reports_figures_path, 'training_curve.png')
+    training_curve_path = os.path.join(reports_figures_path, "training_curve.png")
     plt.savefig(training_curve_path)
     print(f"Training curve saved to {training_curve_path}")
-
 
 
 @click.command()
 @click.argument("model_checkpoint")
 def evaluate(model_checkpoint):
     """Evaluate a trained model.
-    
+
     Inputs:
     model_checkpoint: Name of the model checkpoint to load
-    
+
     Outputs:
     Prints the test loss and accuracy
     """
@@ -98,10 +96,9 @@ def evaluate(model_checkpoint):
     print(model_checkpoint)
 
     # TODO: Implement evaluation logic here
-    
+
     model = MyAwesomeModel()
 
-    
     model_checkpoint_path = os.path.join(trained_models_path, model_checkpoint)
     state_dict = torch.load(model_checkpoint_path)
     # print("Our model: \n\n", model, '\n')
@@ -133,9 +130,7 @@ def evaluate(model_checkpoint):
             # Calculate the mean (get the accuracy for this batch)
             accuracy += torch.mean(equals.type(torch.FloatTensor))
         else:
-            print(f"Test loss: {test_loss/len(test_set):.3f}.. "
-                  f"Test accuracy: {accuracy/len(test_set):.3f}.. ")
-            
+            print(f"Test loss: {test_loss/len(test_set):.3f}.. " f"Test accuracy: {accuracy/len(test_set):.3f}.. ")
 
 
 cli.add_command(train)
