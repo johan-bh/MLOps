@@ -1,0 +1,9 @@
+# conf/model_config.yaml
+model:
+  dropout_probability: 0.3
+  hidden_layers:
+  - 256
+  - 128
+  - 64
+  input_size: 784
+  output_size: 10

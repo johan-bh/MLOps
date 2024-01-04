@@ -1,10 +1,12 @@
-import click
 import torch
 from models.model import MyAwesomeModel
 from data.make_dataset import mnist
 import os
 import matplotlib.pyplot as plt
 from typing import Callable, Optional, Tuple, Union, List
+import hydra
+from omegaconf import DictConfig
+import yaml
 
 
 # Path to the folder containing .pt files
@@ -19,15 +21,9 @@ trained_models_path = os.path.join(current_script_dir, 'models', 'trained_models
 # Path to the reports/figures directory
 reports_figures_path = os.path.join(current_script_dir, '..', 'reports', 'figures')
 
-@click.group()
-def cli():
-    """Command line interface."""
-    pass
 
-
-@click.command()
-@click.option("--lr", default=1e-3, help="learning rate to use for training")
-def train(lr : float):
+def train(config: DictConfig):
+    lr = config.train.lr
     """Train a model on MNIST.
     
     Inputs:
@@ -40,8 +36,17 @@ def train(lr : float):
     print("Training day and night")
     print(lr)
 
-    # TODO: Implement training loop here
-    model = MyAwesomeModel()
+    with open('./conf/model_config.yaml', 'r') as file:
+        model_config = yaml.safe_load(file)
+
+    # Instantiate the model with parameters from the YAML configuration
+    model = MyAwesomeModel(
+        input_size=model_config['model']['input_size'],
+        hidden_layers=model_config['model']['hidden_layers'],
+        output_size=model_config['model']['output_size'],
+        dropout_probability=model_config['model']['dropout_probability'])
+    
+    # Load the training set
     train_set, _ = mnist()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     criterion = torch.nn.CrossEntropyLoss()
@@ -84,9 +89,8 @@ def train(lr : float):
 
 
 
-@click.command()
-@click.argument("model_checkpoint")
-def evaluate(model_checkpoint : str):
+def evaluate(config: DictConfig):
+    model_checkpoint = config.evaluate.model_checkpoint
     """Evaluate a trained model.
     
     Inputs:
@@ -97,10 +101,17 @@ def evaluate(model_checkpoint : str):
     """
     print("Evaluating like my life dependends on it")
     print(model_checkpoint)
-
-    # TODO: Implement evaluation logic here
     
-    model = MyAwesomeModel()
+    with open('./conf/model_config.yaml', 'r') as file:
+        model_config = yaml.safe_load(file)
+
+    # Instantiate the model with parameters from the YAML configuration
+    model = MyAwesomeModel(
+        input_size=model_config['model']['input_size'],
+        hidden_layers=model_config['model']['hidden_layers'],
+        output_size=model_config['model']['output_size'],
+        dropout_probability=model_config['model']['dropout_probability']
+)
 
     
     model_checkpoint_path = os.path.join(trained_models_path, model_checkpoint)
@@ -138,10 +149,14 @@ def evaluate(model_checkpoint : str):
                   f"Test accuracy: {accuracy/len(test_set):.3f}.. ")
             
 
-
-cli.add_command(train)
-cli.add_command(evaluate)
-
+@hydra.main(config_path='../conf', config_name='train_config.yaml',version_base=None)
+def main(config: DictConfig):
+    if config.mode == 'train':
+        train(config)
+    elif config.mode == 'evaluate':
+        evaluate(config)
+    else:
+        raise ValueError("Invalid mode in config file")
 
 if __name__ == "__main__":
-    cli()
+    main()
