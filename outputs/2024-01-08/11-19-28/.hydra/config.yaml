@@ -1,0 +1,5 @@
+train:
+  lr: 0.001
+evaluate:
+  model_checkpoint: trained_model.pth
+mode: train
