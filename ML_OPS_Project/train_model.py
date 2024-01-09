@@ -8,6 +8,7 @@ import hydra
 from omegaconf import DictConfig
 import yaml
 
+# Im just making this change to test automatic docker build using a google cloud build trigger
 
 # Path to the folder containing .pt files
 current_script_path = os.path.abspath(__file__)
